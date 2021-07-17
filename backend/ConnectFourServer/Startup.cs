@@ -19,6 +19,7 @@ namespace ConnectFourServer
 {
     public class Startup
     {
+        private ConnectionsManager _manager;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -40,11 +41,24 @@ namespace ConnectFourServer
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            var hostAppLifetime = app.ApplicationServices.GetRequiredService<IHostApplicationLifetime>();
+            hostAppLifetime.ApplicationStopping.Register(OnShutDown);
+
+            _manager = app.ApplicationServices.GetRequiredService<ConnectionsManager>();
+
             app.UseWebSockets();
             // use created middleware
             app.UseMiddleware<ServerMiddleware>();
 
             app.Run(async context => await context.Response.WriteAsync("Connected"));
+        }
+
+        public void OnShutDown()
+        {
+            if(_manager != null)
+            {
+                _manager.CloseAllConnections();
+            }            
         }
     }
 }
