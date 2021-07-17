@@ -3,7 +3,7 @@ namespace ConnectFourServer.Models
     public class Player
     {
         public string Id { get; }
-        public string PartnerId { get; }
+        public string PartnerId { get; set; }
         public Player(string id)
         {
             Id = id;

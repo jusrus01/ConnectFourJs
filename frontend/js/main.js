@@ -73,11 +73,26 @@ class Game {
     }
 }
 
+// temp
+const partnerIdInput = document.getElementById("partnerId");
+
 document.addEventListener("DOMContentLoaded", () => {
     const game = new Game();
 
     // temp
     game.dataService.connect();
+
+    // more temp
+    const btn = document.getElementById("partnerIdBtn");
+    btn.addEventListener('click', () => {
+        const value = partnerIdInput.value;
+
+        game.dataService.sendMessage({
+            "PartnerId": value
+        });
+    });
+
+
 
     // NOTE: should try to understand what the fuck is going on here lul
     window.main = function() {

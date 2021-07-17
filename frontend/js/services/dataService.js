@@ -1,15 +1,24 @@
 import { serverUrl } from "../config/config.js";
 
 export class DataService {
-    
-    connect() {
-        let socket = new WebSocket(serverUrl);
+    constructor() {
+        this.socket = null;
+    }    
 
-        socket.onmessage = function(event) {
+    connect = () => {
+        this.socket = new WebSocket(serverUrl);
+
+        this.socket.onmessage = function(event) {
             const data = JSON.parse(event.data);
             console.log(data);
-            socket.close();
         }
-        // socket.close();
+    }
+
+    sendMessage = (jsonValues) => {
+        if(this.socket && this.socket.readyState == WebSocket.OPEN) {
+            this.socket.send(JSON.stringify(jsonValues));
+        } else {
+            alert("You're not connected.");
+        }
     }
 }

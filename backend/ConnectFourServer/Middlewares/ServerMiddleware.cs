@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using ConnectFourServer.Managers;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using ConnectFourServer.Models;
+using System.Linq;
 
 namespace ConnectFourServer.Middlewares
 {
@@ -25,28 +27,66 @@ namespace ConnectFourServer.Middlewares
             if(context.WebSockets.IsWebSocketRequest)
             {
                 WebSocket socket = await context.WebSockets.AcceptWebSocketAsync();
+                Player p = _manager.AddSocket(socket);
 
-                string id = _manager.AddSocket(socket);
-
-                if(id == null)
+                if(p == null)
                 {
                     await socket.CloseAsync(WebSocketCloseStatus.Empty, null, CancellationToken.None);
-                    return;
+                    await _next(context);
                 }
 
-                await SendConnectionIdToClient(socket, id);
+                await SendIdToClient(socket, p.Id);
 
                 await HandleResponseData(socket, async(result, buffer) =>
                 {
                     if(result.MessageType == WebSocketMessageType.Text)
                     {
-                        
+                        if(p.PartnerId == null)
+                        {
+                            try
+                            {
+                                // check if id was sent
+                                string json = Encoding.UTF8.GetString(buffer, 0, result.Count);
+                                string id = JsonConvert.DeserializeObject<dynamic>(json).PartnerId;
+
+                                // search for connection with that id
+                                if(p.Id != id)
+                                {
+                                    var partner = _manager.Sockets.Where(conn => conn.Key.Id == id)
+                                        .FirstOrDefault();
+
+                                    // i wonder if values in the list update or not...
+                                    partner.Key.PartnerId = p.Id;
+                                    p.PartnerId = partner.Key.Id;
+
+                                    // send to partner your id
+                                    await SendIdToClient(partner.Value, p.Id);
+                                    
+                                    await SendIdToClient(socket, p.PartnerId);
+                                }
+                            }
+                            catch
+                            {
+                                // do nothing
+                            }
+                        }
+                        else
+                        {
+                            // create game state communication between connected clients
+                        }
                     }
                     else if(result.MessageType == WebSocketMessageType.Close)
                     {
                         // remove from list
+                        _manager.RemoveSocket(socket);
                         // remove from some players partner
+                        if(p.PartnerId != null)
+                        {
+                            _manager.RemovePlayersPartner(p.PartnerId);
+                        }
                         // close socket
+                        await socket.CloseAsync(WebSocketCloseStatus.Empty, null, CancellationToken.None);
+                        await _next(context);
                     }
                 });
             }
@@ -56,7 +96,7 @@ namespace ConnectFourServer.Middlewares
             }
         }
 
-        private async Task SendConnectionIdToClient(WebSocket socket, string id)
+        private async Task SendIdToClient(WebSocket socket, string id)
         {
             // convert data to json
             string json = JsonConvert.SerializeObject(new { Id = id });
