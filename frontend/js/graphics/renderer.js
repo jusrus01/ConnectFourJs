@@ -1,6 +1,8 @@
 import { Square } from "./square.js";
 import { tileSize } from "../config/config.js";
 
+// can just make this not update unmodified values
+
 export class Renderer {
     constructor(ctx) {
         this.ctx = ctx;

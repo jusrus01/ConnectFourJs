@@ -2,6 +2,7 @@ import { InputHandler } from "./handlers/inputHandler.js";
 import { StateHandler, states } from "./handlers/stateHandler.js";
 import { DataService } from "./services/dataService.js";
 import { Renderer } from "./graphics/renderer.js";
+import { Board } from "./models/board.js";
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -9,7 +10,8 @@ const ctx = canvas.getContext("2d");
 // game is updateHandler
 class Game {
     constructor() {
-        this.boardState = '';
+        // this.boardState = '';
+        this.board = new Board('');
         this.player = 0;
         this.partnerId = '';
 
@@ -31,8 +33,8 @@ class Game {
         const values = JSON.parse(event.data.replace(/&quot;/ig,'"'));
 
         if(values.BoardState) {
-            this.boardState = values.BoardState;
-            this.renderer.drawBoard(this.boardState, 64);
+            this.board.overrideBoard(values.BoardState);
+            this.renderer.drawBoard(this.board.get(), 64);
             this.stateHandler.currentState = states.Turn;
             console.log("Received board state, allowing turn");
         }
@@ -72,25 +74,30 @@ class Game {
                     let pos = this.inputHandler.input;
                     console.log("Position received from inputHandler: ", pos);
                     if(pos != null) {
-                        this.renderer.addSquare(pos, this.color);
+                        let finalY = this.inputHandler.findFinalY(pos.x, this.board.get());
 
-                        // this.boardState[(pos.x + 1) * (pos.y + 1)] = this.player.toString();
-                        
-                        // 8 -> cel count
-                        let index = pos.y * 7 + pos.x;
-                        this.boardState = this.boardState.substring(0, index) +
-                            this.player.toString() + this.boardState.substring(index + 1, this.boardState.length);
-
-
-
-                        this.dataService.sendMessage({
-                            "BoardState" : this.boardState,
-                            "PartnerId" : this.partnerId
-                        });
-                        this.inputHandler.input = null;
-
-                        this.stateHandler.currentState = states.Wait;
-                        console.log("Sending state and changing state to Wait");
+                        if(finalY >= 0) {
+                            let finalPos = {
+                                x: pos.x,
+                                y: finalY
+                            }
+    
+                            this.renderer.addSquare(finalPos, this.color);
+    
+                            // this.boardState[(pos.x + 1) * (pos.y + 1)] = this.player.toString();
+                            
+                            // 8 -> cel count
+                            this.board.set(pos.x, finalY, this.player);
+    
+                            this.dataService.sendMessage({
+                                "BoardState" : this.board.get(),
+                                "PartnerId" : this.partnerId
+                            });
+                            this.inputHandler.input = null;
+    
+                            this.stateHandler.currentState = states.Wait;
+                            console.log("Sending state and changing state to Wait");
+                        }
                     }
                 } else {
                     this.inputHandler.listen();
