@@ -71,8 +71,15 @@ namespace ConnectFourServer.Managers
         {
             foreach(var sock in Sockets)
             {
-                await sock.Value.CloseAsync(WebSocketCloseStatus.EndpointUnavailable,
-                    null, CancellationToken.None);
+                try
+                {
+                    await sock.Value.CloseAsync(WebSocketCloseStatus.EndpointUnavailable,
+                        null, CancellationToken.None);
+                }
+                catch
+                {
+                    
+                }
             }
         }
     }

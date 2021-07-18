@@ -36,6 +36,51 @@ export class Renderer {
         this.ctx.fillRect(0, 0, this.screenSize.width, this.screenSize.height);
     }
 
+    drawBoard(boardState, cellsCount) {
+
+        this.items = [];
+
+        let y = 0;
+        let x = 0;
+
+        let color = 0;
+
+        let counter = 0;
+
+        for(let i = 1; i < cellsCount + 1; i++) {
+
+            if(counter == 7) {
+                y += tileSize;
+                x = 0;
+                counter = 0;
+            }
+
+            switch(boardState[i - 1]) {
+                case '1':
+                    color = 'yellow';
+                    break;
+
+                case '2':
+                    color = 'red';
+                    break;
+
+                case '0':
+                    x += tileSize;
+                    counter++;
+                    continue;
+
+                default:
+                    break;
+            }
+            // this is not a smart way to do things...
+            // console.log({ x: x, y: y });
+            this.addItem(new Square({ x: x, y: y }, color, tileSize));
+
+            x += tileSize;
+            counter++;
+        }
+    }
+
     addGrid(color = 'red') {
         const cellsCount = {
             x: this.screenSize.width / tileSize,

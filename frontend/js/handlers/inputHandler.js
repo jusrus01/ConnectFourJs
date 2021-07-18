@@ -26,7 +26,6 @@ export class InputHandler {
                 // so this would not be hit again
                 this.listening = false;
             }
-
         });
     }
 

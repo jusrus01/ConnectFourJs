@@ -5,13 +5,14 @@ export class DataService {
         this.socket = null;
     }    
 
-    connect = () => {
+    connect = (callback) => {
         this.socket = new WebSocket(serverUrl);
+        this.socket.onmessage = callback;
 
-        this.socket.onmessage = function(event) {
-            const data = JSON.parse(event.data);
-            console.log(data);
-        }
+        // this.socket.onmessage = function(event) {
+        //     const data = JSON.parse(event.data);
+        //     console.log(data);
+        // }
     }
 
     sendMessage = (jsonValues) => {

@@ -9,8 +9,6 @@ export const states = {
 
 export class StateHandler {
     constructor() {
-
         this.currentState = states.Disconnected;
     }
-
 }

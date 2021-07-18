@@ -3,11 +3,14 @@ namespace ConnectFourServer.Models
     public class Player
     {
         public string Id { get; }
+        public int Number { get; set; }
         public string PartnerId { get; set; }
+        public bool Won { get; set; }
         public Player(string id)
         {
             Id = id;
             PartnerId = null;
+            Won = false;
         }
 
         public override bool Equals(object obj)

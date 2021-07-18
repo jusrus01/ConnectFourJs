@@ -9,46 +9,93 @@ const ctx = canvas.getContext("2d");
 // game is updateHandler
 class Game {
     constructor() {
+        this.boardState = '';
+        this.player = 0;
+        this.partnerId = '';
+
         this.running = true;
+        this.color = 'green';
 
         this.inputHandler = new InputHandler(canvas);
         this.stateHandler = new StateHandler();
-        this.dataService = new DataService();
         this.renderer = new Renderer(ctx);
+
+        this.dataService = new DataService();
+        // connect to server
+        this.dataService.connect(this.update);
+    }
+
+    update = (event) => {
+        console.log("Received data ", event.data);
+
+        const values = JSON.parse(event.data.replace(/&quot;/ig,'"'));
+
+        if(values.BoardState) {
+            this.boardState = values.BoardState;
+            this.renderer.drawBoard(this.boardState, 64);
+            this.stateHandler.currentState = states.Turn;
+            console.log("Received board state, allowing turn");
+        }
+
+        if(values.PartnerId) {
+            this.partnerId = values.PartnerId;
+        }
+        
+        if(values.Player) {
+            this.player = values.Player;
+            if(this.player == 1) {
+                this.stateHandler.currentState = states.Turn;
+                this.color = "yellow";
+                // console.log("State switched to Turn");
+            } else if(this.player == 2) {
+                this.stateHandler.currentState = states.Wait;
+                this.color = "red";
+                // console.log("State switched to Wait");
+            }
+        }
     }
 
     run() {
         
+        console.log("Current state: ", this.stateHandler.currentState);
+            
         switch(this.stateHandler.currentState) {
-
             case states.Disconnected:
-                // cosntruct url
-                // wait for connection
-                    // if we get connection construct game window
-
-
-                // temp
-                this.stateHandler.currentState = states.Turn;
                 this.renderer.addBackground();
-                this.renderer.addSquare({x: 12, y: 20}, 'red');
                 this.renderer.addGrid();
-
-                this.stateHandler.currentState = states.Turn;
                 break;
 
             case states.Turn:
                 // input was processed
-                if(!this.inputHandler.listening) {
+                if(this.inputHandler.listening) {
                     // put piece in
                     let pos = this.inputHandler.input;
+                    console.log("Position received from inputHandler: ", pos);
                     if(pos != null) {
-                        this.renderer.addSquare(pos, 'green');
-                        // temp
-                        // this.stateHandler.currentState = states.Wait;
-                    }
-                }
+                        this.renderer.addSquare(pos, this.color);
 
-                this.inputHandler.listen();
+                        // this.boardState[(pos.x + 1) * (pos.y + 1)] = this.player.toString();
+                        
+                        // 8 -> cel count
+                        let index = pos.y * 7 + pos.x;
+                        this.boardState = this.boardState.substring(0, index) +
+                            this.player.toString() + this.boardState.substring(index + 1, this.boardState.length);
+
+
+
+                        this.dataService.sendMessage({
+                            "BoardState" : this.boardState,
+                            "PartnerId" : this.partnerId
+                        });
+                        this.inputHandler.input = null;
+
+                        this.stateHandler.currentState = states.Wait;
+                        console.log("Sending state and changing state to Wait");
+                    }
+                } else {
+                    this.inputHandler.listen();
+                    console.log("Input handler started to listen...");
+                }
                 break;
 
             case states.Win:
@@ -60,6 +107,8 @@ class Game {
             case states.Wait:
                 // should just wait until data service
                 // provices another state
+                this.inputHandler.listening = false;
+                this.inputHandler.input = null;
             default:
                 break;
         }
@@ -80,9 +129,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const game = new Game();
 
     // temp
-    game.dataService.connect();
-
-    // more temp
     const btn = document.getElementById("partnerIdBtn");
     btn.addEventListener('click', () => {
         const value = partnerIdInput.value;
@@ -93,8 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
-
-    // NOTE: should try to understand what the fuck is going on here lul
     window.main = function() {
         window.requestAnimationFrame(main);
         game.run();
