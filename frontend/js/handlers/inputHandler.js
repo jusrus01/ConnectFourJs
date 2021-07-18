@@ -1,4 +1,4 @@
-import { tileSize } from "../config/config.js";
+import { cellCountInCol, cellCountInRow, tileSize } from "../config/config.js";
 
 export class InputHandler {
     constructor(canvas) {
@@ -34,4 +34,16 @@ export class InputHandler {
             this.listening = true;
         }
     }
+
+    findFinalY(x, boardState) {
+
+        for(let i = cellCountInCol - 1; i >= 0; i--) {
+            if(boardState[i * cellCountInRow + x] == '0') {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    
 }

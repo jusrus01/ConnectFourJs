@@ -1,3 +1,5 @@
+using System.Net.WebSockets;
+
 namespace ConnectFourServer.Models
 {
     public class Player
@@ -6,6 +8,7 @@ namespace ConnectFourServer.Models
         public int Number { get; set; }
         public string PartnerId { get; set; }
         public bool Won { get; set; }
+        public WebSocket Socket { get; set; }
         public Player(string id)
         {
             Id = id;
