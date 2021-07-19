@@ -11,7 +11,7 @@ export class Board {
         let index = y * cellCountInRow + x;
 
         if(index > this.board.length) {
-            console.assert("Failed to set new state in board.");
+            console.assert("Failed to set new cell in board");
             return;
         }
 
@@ -38,24 +38,21 @@ export class Board {
     }
 
     isMatch() {
-        // check if we already check win/lose/tie state
+        // check if we already checked win/lose/tie state
         if(this.board == this.lastBoard) {
             return -1;
         }
-
         this.lastBoard = this.board.slice();
 
         let tie = true;
-
-        // check
         let x = 0, y = 0;
-        for(let i = 0; i < cellCountInRow * cellCountInCol; i++) {
 
+        for(let i = 0; i < cellCountInRow * cellCountInCol; i++) {
 
             if(this.getAt(x, y) === '0' && tie) {
                 tie = false;
             }
-            // console.log({x: x, y: y});
+
             // check vertical
             if(
                 this.getAt(x, y) === '1' && this.getAt(x, y + 1) === '1' &&
@@ -79,9 +76,6 @@ export class Board {
                 return 1;
             }
 
-            console.log("Horizontal, ", this.getAt(x, y), this.getAt(x + 1, y),
-            this.getAt(x + 2, y), this.getAt(x + 3, y));
-
             if(
                 this.getAt(x, y) === '2' && this.getAt(x + 1, y) === '2' &&
                 this.getAt(x + 2, y) === '2' && this.getAt(x + 3, y) === '2'
@@ -89,7 +83,7 @@ export class Board {
                 return 2;
             }
 
-            // check left to right
+            // checking left to right
             if(
                 this.getAt(x, y) === '1' && this.getAt(x + 1, y + 1) === '1' &&
                 this.getAt(x + 2, y + 2) === '1' && this.getAt(x + 3, y + 3) === '1'
@@ -104,7 +98,7 @@ export class Board {
                 return 2;
             }
 
-            // check right to left
+            // checking right to left
             if(
                 this.getAt(x, y) === '1' && this.getAt(x - 1, y + 1) === '1' &&
                 this.getAt(x - 2, y + 2) === '1' && this.getAt(x - 3, y + 3) === '1'

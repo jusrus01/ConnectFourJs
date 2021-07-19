@@ -1,16 +1,10 @@
 import { Square } from "./square.js";
-import { tileSize } from "../config/config.js";
+import { canvasHeight, canvasWidth, cellCountInCol, cellCountInRow, tileSize } from "../config/config.js";
 
 // NOTE: can just make this not update unmodified values
-
 export class Renderer {
     constructor(ctx) {
         this.ctx = ctx;
-
-        this.screenSize = {
-            width: this.ctx.canvas.clientWidth,
-            height: this.ctx.canvas.clientHeight
-        };
 
         this.items = [];
     }
@@ -29,7 +23,7 @@ export class Renderer {
     
     addBackground() {
         this.ctx.fillStyle = 'gray';
-        this.ctx.fillRect(0, 0, this.screenSize.width, this.screenSize.height);
+        this.ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     }
 
     drawBoard(boardState, cellsCount) {
@@ -77,19 +71,15 @@ export class Renderer {
     }
 
     addGrid(color = 'red') {
-        const cellsCount = {
-            x: this.screenSize.width / tileSize,
-            y: this.screenSize.height / tileSize
-        };
 
-        for(let x = 0; x < cellsCount.x; x++) {
+        for(let x = 0; x < cellCountInRow; x++) {
             this.ctx.moveTo(x * tileSize, 0);
-            this.ctx.lineTo(x * tileSize, this.screenSize.height);
+            this.ctx.lineTo(x * tileSize, canvasHeight);
         }
 
-        for(let y = 0; y < cellsCount.y; y++) {
+        for(let y = 0; y < cellCountInCol; y++) {
             this.ctx.moveTo(0, y * tileSize);
-            this.ctx.lineTo(this.screenSize.width, y * tileSize);
+            this.ctx.lineTo(canvasWidth, y * tileSize);
         }
         
         this.ctx.strokeStyle = 'red';
@@ -98,28 +88,28 @@ export class Renderer {
 
     drawWin() {
         let msg = document.createElement('p');
-        msg.innerText = "YOU WON GG!";
+        msg.innerText = "You won!";
 
         document.getElementById("info").appendChild(msg);
     }
 
     drawLost() {
         let msg = document.createElement('p');
-        msg.innerText = "YOU LOST ;-;";
+        msg.innerText = "You lost :(";
 
         document.getElementById("info").appendChild(msg);
     }
 
     showId(id) {
         let msg = document.createElement('p');
-        msg.innerText = "Share this id: " + id;
+        msg.innerText = "Share this id with a friend: " + id;
 
         document.getElementById("info").appendChild(msg);
     }
 
     drawTie() {
         let msg = document.createElement('p');
-        msg.innerText = "TIED";
+        msg.innerText = "Tied. Better luck next time!";
 
         document.getElementById("info").appendChild(msg);
     }
