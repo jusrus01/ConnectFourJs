@@ -1,10 +1,11 @@
 export const states = {
-    Disconnected: "DC",
+    Disconnected: "DISCONNECTED",
     Turn: "TURN",
     Wait: "WAIT",
     Win: "WIN",
-    Lose: "LOSE",
-    Retry: "RETRY"
+    Lost: "LOST",
+    Retry: "RETRY",
+    Tie: "TIE"
 };
 
 export class StateHandler {

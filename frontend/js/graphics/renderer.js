@@ -1,7 +1,7 @@
 import { Square } from "./square.js";
 import { tileSize } from "../config/config.js";
 
-// can just make this not update unmodified values
+// NOTE: can just make this not update unmodified values
 
 export class Renderer {
     constructor(ctx) {
@@ -26,13 +26,7 @@ export class Renderer {
     addSquare(pos, color) {
         this.items.push(new Square({ x: pos.x * tileSize, y: pos.y * tileSize }, color, tileSize));
     }
-
-    drawBg() {
-        console.log(this.ctx.canvas.clientWidth);
-        this.ctx.fillStyle = 'blue';
-        this.ctx.fillRect(0, 0, this.screenSize.width, this.screenSize.height);
-    }
-
+    
     addBackground() {
         this.ctx.fillStyle = 'gray';
         this.ctx.fillRect(0, 0, this.screenSize.width, this.screenSize.height);
@@ -75,7 +69,6 @@ export class Renderer {
                     break;
             }
             // this is not a smart way to do things...
-            // console.log({ x: x, y: y });
             this.addItem(new Square({ x: x, y: y }, color, tileSize));
 
             x += tileSize;
@@ -101,5 +94,33 @@ export class Renderer {
         
         this.ctx.strokeStyle = 'red';
         this.ctx.stroke();
+    }
+
+    drawWin() {
+        let msg = document.createElement('p');
+        msg.innerText = "YOU WON GG!";
+
+        document.getElementById("info").appendChild(msg);
+    }
+
+    drawLost() {
+        let msg = document.createElement('p');
+        msg.innerText = "YOU LOST ;-;";
+
+        document.getElementById("info").appendChild(msg);
+    }
+
+    showId(id) {
+        let msg = document.createElement('p');
+        msg.innerText = "Share this id: " + id;
+
+        document.getElementById("info").appendChild(msg);
+    }
+
+    drawTie() {
+        let msg = document.createElement('p');
+        msg.innerText = "TIED";
+
+        document.getElementById("info").appendChild(msg);
     }
 }
