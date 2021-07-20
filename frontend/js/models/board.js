@@ -1,4 +1,4 @@
-import { cellCountInCol, cellCountInRow, tileSize } from "../config/config.js";
+import { cellCountInCol, cellCountInRow } from "../config/config.js";
 
 export class Board {
     constructor(boardState) {
@@ -8,25 +8,25 @@ export class Board {
 
     set(x, y, state) {
 
-        let index = y * cellCountInRow + x;
-
-        if(index > this.board.length) {
+        if(x < 0 || x > cellCountInRow || y < 0 || y > cellCountInRow) {
             console.assert("Failed to set new cell in board");
             return;
         }
+
+        let index = y * cellCountInRow + x;
 
         this.board = this.board.substring(0, index) +
             state.toString() + this.board.substring(index + 1, this.board.length);
     }
 
     getAt(x, y) {
-        let index = y * cellCountInRow + x;
 
-        if(index > this.board.length || x > cellCountInRow || x < 0 || y > cellCountInRow || y < 0) {
+        if(x < 0 || x > cellCountInRow || y < 0 || y > cellCountInRow) {
+            console.assert("Failed to get cell in board");
             return -1;
         }
 
-        return this.board.charAt(index);
+        return this.board.charAt(y * cellCountInRow + x);
     }
 
     get() {
@@ -37,15 +37,46 @@ export class Board {
         this.board = newBoardState;
     }
 
+    // do all of them
+    checkWiningPositions(x, y, player) {
+        // check vertical
+        let str = player.toString();
+            
+        if(
+            this.getAt(x, y) === str && this.getAt(x, y + 1) === str &&
+            this.getAt(x, y + 2) === str && this.getAt(x, y + 3) === str
+        ) {
+            return player;
+        } else if(
+            this.getAt(x, y) === str && this.getAt(x + 1, y) === str &&
+            this.getAt(x + 2, y) === str && this.getAt(x + 3, y) === str
+        ) {
+            return player;
+        } else if(
+            this.getAt(x, y) === str && this.getAt(x + 1, y + 1) === str &&
+            this.getAt(x + 2, y + 2) === str && this.getAt(x + 3, y + 3) === str
+        ) {
+            return player;
+        } else if(
+            this.getAt(x, y) === str && this.getAt(x - 1, y + 1) === str &&
+            this.getAt(x - 2, y + 2) === str && this.getAt(x - 3, y + 3) === str
+        ) {
+            return player;
+        } else {
+            return -1;
+        }
+    }
+
     isMatch() {
         // check if we already checked win/lose/tie state
         if(this.board == this.lastBoard) {
             return -1;
         }
+        // copy the board we are checking
         this.lastBoard = this.board.slice();
 
         let tie = true;
-        let x = 0, y = 0;
+        let x = 0, y = 1;
 
         for(let i = 0; i < cellCountInRow * cellCountInCol; i++) {
 
@@ -53,63 +84,9 @@ export class Board {
                 tie = false;
             }
 
-            // check vertical
-            if(
-                this.getAt(x, y) === '1' && this.getAt(x, y + 1) === '1' &&
-                this.getAt(x, y + 2) === '1' && this.getAt(x, y + 3) === '1'
-            ) {
+            if(this.checkWiningPositions(x, y, 1) != -1) {
                 return 1;
-            }
-
-            if(
-                this.getAt(x, y) === '2' && this.getAt(x, y + 1) === '2' &&
-                this.getAt(x, y + 2) === '2' && this.getAt(x, y + 3) === '2'
-            ) {
-                return 2;
-            }
-
-            // check horizontal
-            if(
-                this.getAt(x, y) === '1' && this.getAt(x + 1, y) === '1' &&
-                this.getAt(x + 2, y) === '1' && this.getAt(x + 3, y) === '1'
-            ) {
-                return 1;
-            }
-
-            if(
-                this.getAt(x, y) === '2' && this.getAt(x + 1, y) === '2' &&
-                this.getAt(x + 2, y) === '2' && this.getAt(x + 3, y) === '2'
-            ) {
-                return 2;
-            }
-
-            // checking left to right
-            if(
-                this.getAt(x, y) === '1' && this.getAt(x + 1, y + 1) === '1' &&
-                this.getAt(x + 2, y + 2) === '1' && this.getAt(x + 3, y + 3) === '1'
-            ) {
-                return 1;
-            }
-
-            if(
-                this.getAt(x, y) === '2' && this.getAt(x + 1, y + 1) === '2' &&
-                this.getAt(x + 2, y + 2) === '2' && this.getAt(x + 3, y + 3) === '2'
-            ) {
-                return 2;
-            }
-
-            // checking right to left
-            if(
-                this.getAt(x, y) === '1' && this.getAt(x - 1, y + 1) === '1' &&
-                this.getAt(x - 2, y + 2) === '1' && this.getAt(x - 3, y + 3) === '1'
-            ) {
-                return 1;
-            }
-
-            if(
-                this.getAt(x, y) === '2' && this.getAt(x - 1, y + 1) === '2' &&
-                this.getAt(x - 2, y + 2) === '2' && this.getAt(x - 3, y + 3) === '2'
-            ) {
+            } else if(this.checkWiningPositions(x, y, 2) != -1) {
                 return 2;
             }
 

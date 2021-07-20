@@ -26,7 +26,7 @@ export class Renderer {
         this.ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     }
 
-    drawBoard(boardState, cellsCount) {
+    drawBoard(boardState) {
 
         this.items = [];
 
@@ -37,9 +37,9 @@ export class Renderer {
 
         let counter = 0;
 
-        for(let i = 1; i < cellsCount + 1; i++) {
+        for(let i = 1; i < cellCountInRow * cellCountInCol + 1; i++) {
 
-            if(counter == 7) {
+            if(counter == cellCountInRow) {
                 y += tileSize;
                 x = 0;
                 counter = 0;

@@ -34,8 +34,9 @@ class Game {
 
         if(values.BoardState) {
             this.board.overrideBoard(values.BoardState);
-            this.renderer.drawBoard(this.board.get(), 64);
-            this.stateHandler.currentState = states.Turn;
+            this.renderer.drawBoard(this.board.get());
+
+            this.stateHandler.setState(states.Turn);
         }
 
         if(values.Id) {
@@ -51,10 +52,10 @@ class Game {
         if(values.Player) {
             this.player = values.Player;
             if(this.player == 1) {
-                this.stateHandler.currentState = states.Turn;
+                this.stateHandler.setState(states.Turn);
                 this.color = "yellow";
             } else if(this.player == 2) {
-                this.stateHandler.currentState = states.Wait;
+                this.stateHandler.setState(states.Wait);
                 this.color = "red";
             }
         }
@@ -66,12 +67,13 @@ class Game {
             let playerWon = this.board.isMatch();
             if(playerWon > 0 && playerWon != 0) {
                 if(playerWon == this.player) {
-                    this.stateHandler.currentState = states.Win;
-                } else {
-                    this.stateHandler.currentState = states.Lost;
+                    this.stateHandler.setState(states.Win);
+                    
+                } else { 
+                    this.stateHandler.setState(states.Lost);
                 }
             } else if(playerWon == 0) {
-                this.stateHandler.currentState = states.Tie;
+                this.stateHandler.setState(states.Tie);
             }
         }
 
@@ -82,22 +84,17 @@ class Game {
                 break;
 
             case states.Turn:
-                // input was processed
                 if(this.inputHandler.listening) {
 
                     let pos = this.inputHandler.input;
-
+                    // position was set
                     if(pos != null) {
+
                         let finalY = this.inputHandler.findFinalY(pos.x, this.board.get());
 
                         if(finalY >= 0) {
 
-                            let finalPos = {
-                                x: pos.x,
-                                y: finalY
-                            }
-    
-                            this.renderer.addSquare(finalPos, this.color);
+                            this.renderer.addSquare({ x: pos.x, y: finalY }, this.color);
     
                             this.board.set(pos.x, finalY, this.player);
     
@@ -106,8 +103,8 @@ class Game {
                                 "PartnerId" : this.partnerId
                             });
 
-                            this.inputHandler.input = null;
-                            this.stateHandler.currentState = states.Wait;
+                            this.inputHandler.clear();
+                            this.stateHandler.setState(states.Wait);
                         }
                     }
                 } else {
@@ -117,29 +114,26 @@ class Game {
 
             case states.Tie:
                 this.renderer.drawTie();
-                // temp
-                this.stateHandler.currentState = states.Disconnected;
+                this.stateHandler.setState(states.Disconnected);
                 break;
 
             case states.Win:
                 this.renderer.drawWin();
-                // temp
-                this.stateHandler.currentState = states.Disconnected;
+                this.stateHandler.setState(states.Disconnected);
                 break;
 
             case states.Lost:
                 this.renderer.drawLost();
-                // temp
-                this.stateHandler.currentState = states.Disconnected;
+                this.stateHandler.setState(states.Disconnected);
                 break;
 
             case states.Wait:
-                this.inputHandler.listening = false;
-                this.inputHandler.input = null;
+                this.inputHandler.stopListening();
+                this.inputHandler.clear();
             default:
                 break;
         }
-        
+
         this.renderer.draw();
     }
 }

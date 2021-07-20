@@ -19,6 +19,16 @@ export class InputHandler {
         });
     }
 
+    clear() {
+        this.input = null;
+    }
+
+    stopListening() {
+        if(this.listening) {
+            this.listening = false;
+        }
+    }
+
     listen() {
         if(!this.listening) {
             this.listening = true;

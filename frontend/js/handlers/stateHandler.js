@@ -12,4 +12,8 @@ export class StateHandler {
     constructor() {
         this.currentState = states.Disconnected;
     }
+
+    setState = (state) => {
+        this.currentState = state;
+    }
 }
