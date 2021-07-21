@@ -22,10 +22,25 @@
   </head>
 
   <body>
-    <canvas width="350" height="300" id="gameCanvas"></canvas>
-    <input type="text" id="partnerId" />
-    <button id="partnerIdBtn">Send partner id</button>
+    <div class="game-window">
+      <h2>Connect Four</h2>
+      <p>Status: <span id="status">Not Connected</span></p>
+      <div>
+        <canvas width="350" height="300" id="gameCanvas">
+          Sorry. Your browser does not support canvas.
+        </canvas>
+        <p>You: <span id="myScore">0</span></p>
+        <p>Friend: <span id="foeScore">0</span></p>
+      </div>
+
+      <input class="partner" type="text" id="partnerId" />
+      <button class="partner" id="partnerIdBtn">Connect with your friend!</button>
+
+      <button id="retryBtn">Retry</button>
+      <div id="info"></div>
+
+    </div>
+
     <script type="module" src="js/main.js"></script>
-    <div id="info"></div>
   </body>
 </html>

@@ -1,7 +1,9 @@
 import { Square } from "./square.js";
 import { canvasHeight, canvasWidth, cellCountInCol, cellCountInRow, tileSize } from "../config/config.js";
+import { states } from "../handlers/stateHandler.js";
 
 // NOTE: can just make this not update unmodified values
+// when animating drop down
 export class Renderer {
     constructor(ctx) {
         this.ctx = ctx;
@@ -62,7 +64,7 @@ export class Renderer {
                 default:
                     break;
             }
-            // this is not a smart way to do things...
+
             this.addItem(new Square({ x: x, y: y }, color, tileSize));
 
             x += tileSize;
@@ -87,17 +89,17 @@ export class Renderer {
     }
 
     drawWin() {
-        let msg = document.createElement('p');
-        msg.innerText = "You won!";
+        // let msg = document.createElement('p');
+        // msg.innerText = "You won!";
 
-        document.getElementById("info").appendChild(msg);
+        // document.getElementById("info").appendChild(msg);
     }
 
     drawLost() {
-        let msg = document.createElement('p');
-        msg.innerText = "You lost :(";
+        // let msg = document.createElement('p');
+        // msg.innerText = "You lost :(";
 
-        document.getElementById("info").appendChild(msg);
+        // document.getElementById("info").appendChild(msg);
     }
 
     showId(id) {
@@ -108,9 +110,25 @@ export class Renderer {
     }
 
     drawTie() {
-        let msg = document.createElement('p');
-        msg.innerText = "Tied. Better luck next time!";
+        // let msg = document.createElement('p');
+        // msg.innerText = "Tied. Better luck next time!";
 
-        document.getElementById("info").appendChild(msg);
+        // document.getElementById("info").appendChild(msg);
+    }
+
+    setStatus(status) {
+
+        const state = document.getElementById("status");
+
+        if(state.innerText === status) {
+            return;
+        }
+
+        state.innerText = status;
+    }
+
+    setScore(score, foeScore) {
+        document.getElementById("myScore").innerText = score;
+        document.getElementById("foeScore").innerText = foeScore;
     }
 }

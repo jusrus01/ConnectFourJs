@@ -37,27 +37,32 @@ export class Board {
         this.board = newBoardState;
     }
 
-    // do all of them
     checkWiningPositions(x, y, player) {
-        // check vertical
+        
         let str = player.toString();
-            
+        // checking vertical
         if(
             this.getAt(x, y) === str && this.getAt(x, y + 1) === str &&
             this.getAt(x, y + 2) === str && this.getAt(x, y + 3) === str
         ) {
             return player;
-        } else if(
+        } 
+        // checking horizontal
+        else if(
             this.getAt(x, y) === str && this.getAt(x + 1, y) === str &&
             this.getAt(x + 2, y) === str && this.getAt(x + 3, y) === str
         ) {
             return player;
-        } else if(
+        } 
+        // checking left to right diagonal
+        else if(
             this.getAt(x, y) === str && this.getAt(x + 1, y + 1) === str &&
             this.getAt(x + 2, y + 2) === str && this.getAt(x + 3, y + 3) === str
         ) {
             return player;
-        } else if(
+        }
+        // checking right to left diagonal
+        else if(
             this.getAt(x, y) === str && this.getAt(x - 1, y + 1) === str &&
             this.getAt(x - 2, y + 2) === str && this.getAt(x - 3, y + 3) === str
         ) {

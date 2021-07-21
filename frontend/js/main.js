@@ -25,6 +25,10 @@ class Game {
 
         this.dataService = new DataService();
 
+        // keeping track of score
+        this.score = 0;
+        this.foeScore = 0;
+
         // connecting to server
         this.dataService.connect(this.update);
     }
@@ -79,11 +83,18 @@ class Game {
 
         switch(this.stateHandler.currentState) {
             case states.Disconnected:
+                this.score = 0;
+                this.foeScore = 0;
+
+                this.renderer.setStatus('Disconnected');
                 this.renderer.addBackground();
                 this.renderer.addGrid();
                 break;
 
             case states.Turn:
+                
+                this.renderer.setStatus("Waiting for your turn...");
+
                 if(this.inputHandler.listening) {
 
                     let pos = this.inputHandler.input;
@@ -113,23 +124,47 @@ class Game {
                 break;
 
             case states.Tie:
+                this.score++;
+                this.foeScore++;
+                this.renderer.setScore(this.score, this.foeScore);
+
+                this.renderer.setStatus("Tied.");
+
                 this.renderer.drawTie();
-                this.stateHandler.setState(states.Disconnected);
+                this.stateHandler.setState(states.None);
                 break;
 
             case states.Win:
+                this.score++;
+                this.renderer.setScore(this.score, this.foeScore);
+
+                this.renderer.setStatus("You won!");
                 this.renderer.drawWin();
-                this.stateHandler.setState(states.Disconnected);
+                this.stateHandler.setState(states.None);
                 break;
 
             case states.Lost:
+                this.foeScore++;
+                this.renderer.setScore(this.score, this.foeScore);
+
+                this.renderer.setStatus("You lost!");
+
                 this.renderer.drawLost();
-                this.stateHandler.setState(states.Disconnected);
+                this.stateHandler.setState(states.None);
                 break;
 
             case states.Wait:
+                this.renderer.setStatus("Waiting for your friend's turn...");
+
                 this.inputHandler.stopListening();
                 this.inputHandler.clear();
+                break;
+
+            case states.None:
+                // might be wrong
+                this.renderer.addBackground();
+                this.renderer.addGrid();
+                break;
             default:
                 break;
         }
@@ -154,6 +189,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // temp
+    const retryBtn = document.getElementById("retryBtn");
+    retryBtn.addEventListener('click', () => {
+
+        if(game.stateHandler.currentState == states.None) {
+            game.dataService.sendMessage({
+                "PartnerId": game.partnerId,
+                "Retry" : true
+            });
+        }
+    });
 
     window.main = function() {
         window.requestAnimationFrame(main);

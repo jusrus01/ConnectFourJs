@@ -5,7 +5,8 @@ export const states = {
     Win: "WIN",
     Lost: "LOST",
     Retry: "RETRY",
-    Tie: "TIE"
+    Tie: "TIE",
+    None: "NONE"
 };
 
 export class StateHandler {
