@@ -1,0 +1,109 @@
+:root {
+    --clr-white: #EAD4C9;
+    --clr-secondary-300: #2E1A27;
+}
+
+@font-face {
+    font-family: roboto-regular;
+    src: url(../assets/fonts/Roboto-Regular.ttf);
+}
+
+@font-face {
+    font-family: roboto-bold;
+    src: url(../assets/fonts/Roboto-Bold.ttf);
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    background-color: var(--clr-white);
+    color: var(--clr-secondary-300);
+
+    font-family: roboto-regular, Arial, Helvetica, sans-serif;
+}
+
+.container {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.split--center {
+    justify-content: center;
+    align-items: center;
+}
+
+.split--left {
+    justify-content: left;
+}
+
+.split {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 40em) {
+    .split {
+      flex-direction: row;
+    }
+  
+    .split > * {
+      flex-basis: 100%;
+    }
+  
+    .split > * + * {
+      margin-left: 2em;
+    }
+}
+
+.game-window {
+    /* text-align: center; */
+}
+
+.center-align {
+    /* text-align: center; */
+}
+
+.header-text {
+    font-family: roboto-bold;
+    font-size: 5rem;
+}
+
+.status-text {
+    padding: 0;
+    margin: 0;
+}
+
+.status-text--bold {
+    font-family: roboto-bold;
+}
+
+.game {
+    position: relative;
+    left: 100px;
+}
+
+.game-controls {
+    position: relative;
+    right: 100px;
+}
+
+.score {
+    font-size: 2rem;
+}
+
+.score-number {
+    font-family: roboto-bold;
+}
+
+.score--color {
+    color: red;
+}
+
+.retry {
+}

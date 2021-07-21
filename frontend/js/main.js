@@ -31,6 +31,9 @@ class Game {
 
         // connecting to server
         this.dataService.connect(this.update);
+
+        // hide retry button
+        this.renderer.hideRetryBtn();
     }
 
     update = (event) => {
@@ -50,6 +53,7 @@ class Game {
 
         if(values.PartnerId) {
             this.partnerId = values.PartnerId;
+            this.renderer.hideInputHolder();
         }
         
         // set color based on your turn
@@ -164,6 +168,8 @@ class Game {
                 // might be wrong
                 this.renderer.addBackground();
                 this.renderer.addGrid();
+
+                this.renderer.showRetryBtn();
                 break;
             default:
                 break;
@@ -199,6 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 "Retry" : true
             });
         }
+        game.renderer.hideRetryBtn();
     });
 
     window.main = function() {

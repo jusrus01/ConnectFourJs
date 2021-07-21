@@ -131,4 +131,19 @@ export class Renderer {
         document.getElementById("myScore").innerText = score;
         document.getElementById("foeScore").innerText = foeScore;
     }
+
+    showRetryBtn() {
+        const retryBtn = document.getElementById("retryBtn");
+        retryBtn.setAttribute("style", "visibility: visible;");
+    }
+
+    hideRetryBtn() {
+        const retryBtn = document.getElementById("retryBtn");
+        retryBtn.setAttribute("style", "visibility: hidden;");
+    }
+
+    hideInputHolder() {
+        const holder = document.getElementById("inputHolder");
+        holder.setAttribute("style", "visibility: hidden;");
+    }
 }
