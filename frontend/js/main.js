@@ -193,6 +193,8 @@ document.addEventListener("DOMContentLoaded", () => {
         game.dataService.sendMessage({
             "PartnerId": value
         });
+
+        partnerIdInput.value = '';
     });
 
     // temp
