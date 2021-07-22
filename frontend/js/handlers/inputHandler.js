@@ -4,16 +4,17 @@ export class InputHandler {
     constructor(canvas) {
         this.listening = false;
         this.input = null;
+        this.rect = canvas.getBoundingClientRect();
 
         canvas.addEventListener('click', (event) => {
 
             if(this.listening) {
 
                 this.input = {
-                    x: Math.trunc(event.clientX / tileSize),
-                    y: Math.trunc(event.clientY / tileSize)
+                    x: Math.trunc((event.clientX - this.rect.left) / tileSize),
+                    y: Math.trunc((event.clientY - this.rect.top) / tileSize)
                 };
-
+                
                 this.listening = false;
             }
         });
