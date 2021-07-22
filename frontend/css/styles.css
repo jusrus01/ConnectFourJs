@@ -1,6 +1,6 @@
 :root {
-    --clr-white: #EAD4C9;
-    --clr-secondary-300: #2E1A27;
+    --clr-white: #F9FAF9;
+    --clr-secondary-300: #2C272E;
 }
 
 @font-face {
@@ -20,8 +20,8 @@ html, body {
 }
 
 body {
-    background-color: var(--clr-white);
-    color: var(--clr-secondary-300);
+    background-color: var(--clr-secondary-300);
+    color: var(--clr-white);
 
     font-family: roboto-regular, Arial, Helvetica, sans-serif;
 }
@@ -102,7 +102,7 @@ body {
 }
 
 .score--color {
-    color: red;
+    color: #A55C1A;
 }
 
 .retry {
@@ -113,7 +113,7 @@ body {
 }
 
 input[type=text] {
-    border: 2px solid red;
+    border: 2px solid #A55C1A;;
     border-radius: 4px;
     width: 250px;
     height: 40px;
@@ -123,12 +123,16 @@ button {
     border: 0;
     padding: 12px 16px;
     color: white;
-    background-color: green;
+    border: 1px solid #549f63;
+    background-color: #549f63;
+    border-radius: 10px;
+    font-family: roboto-bold;
 }
 
 button:hover {
-    color: green;
-    background-color: white;
+    color: #549f63;
+    background-color: transparent;
+    border: 1px solid #549f63;
 }
 
 .btn {

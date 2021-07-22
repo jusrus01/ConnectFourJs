@@ -3,6 +3,7 @@ import { StateHandler, states } from "./handlers/stateHandler.js";
 import { DataService } from "./services/dataService.js";
 import { Renderer } from "./graphics/renderer.js";
 import { Board } from "./models/board.js";
+import { playerOneColor, playerTwoColor } from "./config/config.js";
 
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
@@ -61,10 +62,10 @@ class Game {
             this.player = values.Player;
             if(this.player == 1) {
                 this.stateHandler.setState(states.Turn);
-                this.color = "yellow";
+                this.color = playerOneColor;
             } else if(this.player == 2) {
                 this.stateHandler.setState(states.Wait);
-                this.color = "red";
+                this.color = playerTwoColor;
             }
         }
     }
@@ -109,7 +110,7 @@ class Game {
 
                         if(finalY >= 0) {
 
-                            this.renderer.addSquare({ x: pos.x, y: finalY }, this.color);
+                            this.renderer.addCircle({ x: pos.x, y: finalY }, this.color);
     
                             this.board.set(pos.x, finalY, this.player);
     
@@ -175,6 +176,11 @@ class Game {
                 break;
         }
 
+        // temp
+        if(this.stateHandler.currentState !== states.None) {
+            this.renderer.hideRetryBtn();
+        }
+
         this.renderer.draw();
     }
 }
@@ -206,8 +212,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 "PartnerId": game.partnerId,
                 "Retry" : true
             });
+            game.renderer.hideRetryBtn();
         }
-        game.renderer.hideRetryBtn();
     });
 
     window.main = function() {

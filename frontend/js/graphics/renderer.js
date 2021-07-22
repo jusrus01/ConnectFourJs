@@ -1,6 +1,7 @@
 import { Square } from "./square.js";
-import { canvasHeight, canvasWidth, cellCountInCol, cellCountInRow, tileSize } from "../config/config.js";
+import { canvasHeight, canvasWidth, cellCountInCol, cellCountInRow, playerOneColor, playerTwoColor, tileSize } from "../config/config.js";
 import { states } from "../handlers/stateHandler.js";
+import { Circle } from "./circle.js";
 
 // NOTE: can just make this not update unmodified values
 // when animating drop down
@@ -22,9 +23,13 @@ export class Renderer {
     addSquare(pos, color) {
         this.items.push(new Square({ x: pos.x * tileSize, y: pos.y * tileSize }, color, tileSize));
     }
+
+    addCircle(pos, color) {
+        this.items.push(new Circle({ x: pos.x * tileSize, y: pos.y * tileSize }, color, tileSize));
+    }
     
     addBackground() {
-        this.ctx.fillStyle = 'gray';
+        this.ctx.fillStyle = '#E2EAE6';
         this.ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     }
 
@@ -49,11 +54,11 @@ export class Renderer {
 
             switch(boardState[i - 1]) {
                 case '1':
-                    color = 'yellow';
+                    color = playerOneColor;
                     break;
 
                 case '2':
-                    color = 'red';
+                    color = playerTwoColor;
                     break;
 
                 case '0':
@@ -65,14 +70,14 @@ export class Renderer {
                     break;
             }
 
-            this.addItem(new Square({ x: x, y: y }, color, tileSize));
+            this.addItem(new Circle({ x: x, y: y }, color, tileSize));
 
             x += tileSize;
             counter++;
         }
     }
 
-    addGrid(color = 'red') {
+    addGrid(color = '#2C272E') {
 
         for(let x = 0; x < cellCountInRow; x++) {
             this.ctx.moveTo(x * tileSize, 0);
@@ -84,7 +89,7 @@ export class Renderer {
             this.ctx.lineTo(canvasWidth, y * tileSize);
         }
         
-        this.ctx.strokeStyle = 'red';
+        this.ctx.strokeStyle = color;
         this.ctx.stroke();
     }
 
