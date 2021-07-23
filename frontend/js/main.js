@@ -42,7 +42,7 @@ class Game {
 
         if(values.BoardState) {
             this.board.overrideBoard(values.BoardState);
-            this.renderer.drawBoard(this.board.get());
+            // this.renderer.drawBoard(this.board.get());
 
             this.stateHandler.setState(states.Turn);
         }
@@ -110,7 +110,7 @@ class Game {
 
                         if(finalY >= 0) {
 
-                            this.renderer.addCircle({ x: pos.x, y: finalY }, this.color);
+                            // this.renderer.addCircle({ x: pos.x, y: finalY }, this.color);
     
                             this.board.set(pos.x, finalY, this.player);
     
@@ -169,7 +169,7 @@ class Game {
                 // might be wrong
                 this.renderer.addBackground();
                 this.renderer.addGrid();
-
+                this.board.overrideBoard('');
                 this.renderer.showRetryBtn();
                 break;
             default:
@@ -181,6 +181,11 @@ class Game {
             this.renderer.hideRetryBtn();
         }
 
+        this.renderer.addBackground();
+        this.renderer.addGrid();
+
+        this.renderer.addAreaHighlight(this.inputHandler.mousePos);
+        this.renderer.drawBoard(this.board.get());
         this.renderer.draw();
     }
 }

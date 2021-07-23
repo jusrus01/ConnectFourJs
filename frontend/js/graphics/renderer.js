@@ -35,6 +35,10 @@ export class Renderer {
 
     drawBoard(boardState) {
 
+        if(boardState === '' || boardState == undefined) {
+            return;
+        }
+
         this.items = [];
 
         let y = 0;
@@ -151,5 +155,19 @@ export class Renderer {
     hideInputHolder() {
         const holder = document.getElementById("inputHolder");
         holder.setAttribute("style", "visibility: hidden;");
+    }
+
+    addAreaHighlight(mousePos) {
+
+        if(mousePos == null) {
+            return;
+        }
+
+        if(mousePos.x >= 0 && mousePos.x < cellCountInRow) {
+            this.ctx.fillStyle = 'rgba(44, 39, 46, 0.5)';
+
+            this.ctx.fillRect(mousePos.x * tileSize, 0, tileSize, canvasHeight);
+
+        }
     }
 }

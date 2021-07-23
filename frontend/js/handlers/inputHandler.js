@@ -4,6 +4,7 @@ export class InputHandler {
     constructor(canvas) {
         this.listening = false;
         this.input = null;
+        this.mousePos = null;
         this.rect = canvas.getBoundingClientRect();
 
         canvas.addEventListener('click', (event) => {
@@ -18,6 +19,17 @@ export class InputHandler {
                 this.listening = false;
             }
         });
+
+        canvas.addEventListener("mousemove", (event) => {
+            this.mousePos = {
+                x: Math.trunc((event.clientX - this.rect.left) / tileSize),
+                y: Math.trunc((event.clientY - this.rect.top) / tileSize)
+            };
+        });
+
+        canvas.addEventListener("mouseleave", () => {
+            this.mousePos = null;
+        })
     }
 
     clear() {
