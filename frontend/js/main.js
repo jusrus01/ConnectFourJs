@@ -180,6 +180,8 @@ class Game {
         if(this.stateHandler.currentState !== states.None) {
             this.renderer.hideRetryBtn();
         }
+        
+        this.renderer.clearScreen();
 
         this.renderer.addBackground();
         this.renderer.addGrid();
