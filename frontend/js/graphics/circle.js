@@ -9,32 +9,21 @@ export class Circle {
         this.isDrawn = false;
         this.lastPos = this.pos;
         this.padding = 2;
+
+        this.circle = new Path2D();
+        this.halfSize = this.size / 2;
+        this.r = 2 * Math.PI;
     }
 
     draw(ctx) {
-        if(this.isDrawn && !Utils.arePositionsEqual(this.pos, this.lastPos)) {
+        if((this.isDrawn && !Utils.arePositionsEqual(this.pos, this.lastPos)) || !this.isDrawn) {
             ctx.fillStyle = this.color;
 
-            // creating circle
-            let circle = new Path2D();
-            let halfSize = this.size / 2;
-            circle.arc(this.pos.x + halfSize, this.pos.y + halfSize, halfSize - this.padding, 0, 2 * Math.PI)
+            this.circle.arc(this.pos.x + this.halfSize, this.pos.y + this.halfSize, this.halfSize - this.padding, 0, this.r);
 
-            ctx.fill(circle);
+            ctx.fill(this.circle);
 
             this.lastPos = this.pos;
-
-        } else if(!this.isDrawn) {
-            ctx.fillStyle = this.color;
-
-            // creating circle
-            let circle = new Path2D();
-            let halfSize = this.size / 2;
-            circle.arc(this.pos.x + halfSize, this.pos.y + halfSize, halfSize - this.padding, 0, 2 * Math.PI)
-            
-            ctx.fill(circle);
-
-            this.isDrawn = true;
         }
     }
 }

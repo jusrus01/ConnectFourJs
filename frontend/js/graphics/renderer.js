@@ -12,6 +12,10 @@ export class Renderer {
         this.items = [];
     }
 
+    clearScreen() {
+        this.ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    }
+
     draw() {
         this.items.forEach(item => item.draw(this.ctx));
     }
@@ -82,6 +86,8 @@ export class Renderer {
     }
 
     addGrid(color = '#2C272E') {
+
+        this.ctx.beginPath();
 
         for(let x = 0; x < cellCountInRow; x++) {
             this.ctx.moveTo(x * tileSize, 0);
