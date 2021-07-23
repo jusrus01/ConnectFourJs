@@ -171,9 +171,7 @@ export class Renderer {
 
         if(mousePos.x >= 0 && mousePos.x < cellCountInRow) {
             this.ctx.fillStyle = 'rgba(44, 39, 46, 0.5)';
-
             this.ctx.fillRect(mousePos.x * tileSize, 0, tileSize, canvasHeight);
-
         }
     }
 }

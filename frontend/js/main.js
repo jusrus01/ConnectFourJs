@@ -71,8 +71,10 @@ class Game {
     }
 
     run() {
-        // checking if someone won/lost/tied
-        if(!this.stateHandler.currentState != states.Disconnected) {
+
+        if(this.stateHandler.currentState === states.Turn ||
+            this.stateHandler.currentState === states.Wait) {
+
             let playerWon = this.board.isMatch();
             if(playerWon > 0 && playerWon != 0) {
                 if(playerWon == this.player) {
@@ -166,21 +168,22 @@ class Game {
                 break;
 
             case states.None:
-                // might be wrong
-                this.renderer.addBackground();
-                this.renderer.addGrid();
                 this.board.overrideBoard('');
                 this.renderer.showRetryBtn();
+                this.stateHandler.setState(states.Retry);
+                break;
+
+            case states.Retry:
                 break;
             default:
                 break;
         }
 
         // temp
-        if(this.stateHandler.currentState !== states.None) {
+        if(this.stateHandler.currentState !== states.Retry) {
             this.renderer.hideRetryBtn();
         }
-        
+
         this.renderer.clearScreen();
 
         this.renderer.addBackground();

@@ -11,16 +11,11 @@ export class Square {
     }    
 
     draw(ctx) {
-        if(this.isDrawn && !Utils.arePositionsEqual(this.pos, this.lastPos)) {
+        if((this.isDrawn && !Utils.arePositionsEqual(this.pos, this.lastPos)) || !this.isDrawn) {
             ctx.fillStyle = this.color;
             ctx.fillRect(this.pos.x, this.pos.y, this.size, this.size);
-
             this.lastPos = this.pos;
 
-        } else if(!this.isDrawn) {
-            ctx.fillStyle = this.color;
-            ctx.fillRect(this.pos.x, this.pos.y, this.size, this.size);
-            this.isDrawn = true;
         }
     }
 }

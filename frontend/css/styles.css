@@ -95,6 +95,7 @@ body {
 
 .score {
     font-size: 2rem;
+    margin: 0;
 }
 
 .score-number {
@@ -110,13 +111,17 @@ body {
 
 .id-text {
     font-family: roboto-bold;
+    font-size: large;
 }
 
 input[type=text] {
-    border: 2px solid #A55C1A;;
-    border-radius: 4px;
     width: 250px;
     height: 40px;
+    border-radius: 10px;
+}
+
+input:focus {
+    outline: #549f63;
 }
 
 button {

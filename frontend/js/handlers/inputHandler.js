@@ -50,9 +50,11 @@ export class InputHandler {
 
     findFinalY(x, boardState) {
 
-        for(let i = cellCountInCol - 1; i >= 0; i--) {
-            if(boardState[i * cellCountInRow + x] == '0') {
-                return i;
+        if(x != null) {
+            for(let i = cellCountInCol - 1; i >= 0; i--) {
+                if(boardState[i * cellCountInRow + x] == '0') {
+                    return i;
+                }
             }
         }
         return -1;

@@ -74,7 +74,7 @@ export class Board {
 
     isMatch() {
         // check if we already checked win/lose/tie state
-        if(this.board == this.lastBoard) {
+        if(this.board == this.lastBoard || this.board === '') {
             return -1;
         }
         // copy the board we are checking
