@@ -39,11 +39,12 @@ export class Renderer {
 
     drawBoard(boardState) {
 
+        this.items = [];
+
         if(boardState === '' || boardState == undefined) {
             return;
         }
 
-        this.items = [];
 
         let y = 0;
         let x = 0;

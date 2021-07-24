@@ -217,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const retryBtn = document.getElementById("retryBtn");
     retryBtn.addEventListener('click', () => {
 
-        if(game.stateHandler.currentState == states.None) {
+        if(game.stateHandler.currentState === states.Retry) {
             game.dataService.sendMessage({
                 "PartnerId": game.partnerId,
                 "Retry" : true
