@@ -164,6 +164,11 @@ export class Renderer {
         holder.setAttribute("style", "visibility: hidden;");
     }
 
+    showInputHolder() {
+        const holder = document.getElementById("inputHolder");
+        holder.setAttribute("style", "");
+    }
+
     addAreaHighlight(mousePos) {
 
         if(mousePos == null) {

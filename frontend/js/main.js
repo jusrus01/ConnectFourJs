@@ -40,6 +40,20 @@ class Game {
     update = (event) => {
         const values = JSON.parse(event.data);
 
+        console.log(values);
+
+        if(values.Close && values.Close == "true") {
+            this.board.overrideBoard('');
+            this.stateHandler.setState(states.Disconnected);
+            this.score = 0;
+            this.foeScore = 0;
+            this.renderer.hideRetryBtn();
+            this.partnerId = '';
+            this.renderer.showInputHolder();
+
+            alert("Your friend disconnected.");
+        } 
+
         if(values.BoardState) {
             this.board.overrideBoard(values.BoardState);
             this.stateHandler.setState(states.Turn);
@@ -220,6 +234,11 @@ document.addEventListener("DOMContentLoaded", () => {
             });
             game.renderer.hideRetryBtn();
         }
+    });
+
+    // close socket
+    window.addEventListener("beforeunload", function(e) {
+        game.dataService.close();
     });
 
     window.main = function() {

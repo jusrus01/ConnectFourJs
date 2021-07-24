@@ -16,7 +16,7 @@ namespace ConnectFourServer.Managers
             Sockets = new ConcurrentDictionary<Player, WebSocket>();
         }
 
-        public void RemovePlayersPartner(string partnerId)
+        public WebSocket RemovePlayersPartner(string partnerId)
         {
             try
             {
@@ -24,10 +24,13 @@ namespace ConnectFourServer.Managers
                     .First();
 
                 value.Key.PartnerId = null;
+
+                return value.Value;
             }
             catch
             {
                 Console.WriteLine($"Manager->RemovePlayersPartner: Failed to find player with {partnerId}");
+                return null;
             }
         }
 

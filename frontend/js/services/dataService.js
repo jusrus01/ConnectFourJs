@@ -17,4 +17,10 @@ export class DataService {
             alert("You are not connected to the server.");
         }
     }
+
+    close = () => {
+        if(this.socket && this.socket.readyState == WebSocket.OPEN) {
+            this.socket.close();
+        }
+    }
 }

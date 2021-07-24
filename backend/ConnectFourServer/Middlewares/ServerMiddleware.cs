@@ -125,7 +125,14 @@ namespace ConnectFourServer.Middlewares
                         // remove from some players partner
                         if(p.PartnerId != null)
                         {
-                            _manager.RemovePlayersPartner(p.PartnerId);
+                           WebSocket partnerSocket = _manager.RemovePlayersPartner(p.PartnerId);
+                           
+                           if(partnerSocket != null)
+                           {
+                               // send message that partner disconnected
+                               await partnerSocket.SendAsync(Encoding.UTF8.GetBytes("{ \"Close\" : \"true\"}"),
+                                    WebSocketMessageType.Text, true, CancellationToken.None);
+                           }
                         }
                         // close socket
                         await socket.CloseAsync(WebSocketCloseStatus.Empty, null, CancellationToken.None);
