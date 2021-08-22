@@ -27,7 +27,6 @@ body {
 }
 
 .container {
-    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,10 +43,11 @@ body {
 
 .split {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
+    justify-content: center;
 }
 
-@media (min-width: 40em) {
+@media (min-width: 68.75rem) {
     .split {
       flex-direction: row;
     }
@@ -58,6 +58,10 @@ body {
   
     .split > * + * {
       margin-left: 2em;
+    }
+
+    .container {
+        height: 100%;
     }
 }
 
@@ -106,9 +110,6 @@ body {
     color: #A55C1A;
 }
 
-.retry {
-}
-
 .id-text {
     font-family: roboto-bold;
     font-size: large;
@@ -140,6 +141,7 @@ button:hover {
     border: 1px solid #549f63;
 }
 
-.btn {
-
+canvas {
+    width: 100%;
+    height: 100%;
 }
