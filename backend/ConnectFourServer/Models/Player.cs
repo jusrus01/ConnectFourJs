@@ -18,7 +18,7 @@ namespace ConnectFourServer.Models
 
         public override bool Equals(object obj)
         {
-            if(obj != null) 
+            if (obj != null)
             {
                 return (obj as Player).Id.Equals(Id);
             }

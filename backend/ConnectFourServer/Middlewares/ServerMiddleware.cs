@@ -24,12 +24,12 @@ namespace ConnectFourServer.Middlewares
 
         public async Task InvokeAsync(HttpContext context)
         {
-            if(context.WebSockets.IsWebSocketRequest)
+            if (context.WebSockets.IsWebSocketRequest)
             {
                 WebSocket socket = await context.WebSockets.AcceptWebSocketAsync();
                 Player p = _manager.AddSocket(socket);
 
-                if(p == null)
+                if (p == null)
                 {
                     await socket.CloseAsync(WebSocketCloseStatus.Empty, null, CancellationToken.None);
                     await _next(context);
@@ -37,11 +37,11 @@ namespace ConnectFourServer.Middlewares
 
                 await SendConnectionIdToClient(socket, p.Id);
 
-                await HandleResponseData(socket, async(result, buffer) =>
+                await HandleResponseData(socket, async (result, buffer) =>
                 {
-                    if(result.MessageType == WebSocketMessageType.Text)
+                    if (result.MessageType == WebSocketMessageType.Text)
                     {
-                        if(p.PartnerId == null)
+                        if (p.PartnerId == null)
                         {
                             try
                             {
@@ -52,7 +52,7 @@ namespace ConnectFourServer.Middlewares
                                 Console.WriteLine(json);
 
                                 // search for connection with that id
-                                if(p.Id != id)
+                                if (p.Id != id)
                                 {
                                     var partner = _manager.Sockets.Where(conn => conn.Key.Id == id)
                                         .FirstOrDefault();
@@ -63,7 +63,7 @@ namespace ConnectFourServer.Middlewares
 
                                     // the player who set id gets to go first
                                     p.Number = 1;
-                                    
+
                                     partner.Key.Number = 2;
 
                                     // send to partner your id
@@ -85,7 +85,7 @@ namespace ConnectFourServer.Middlewares
 
                             var dataObj = JsonConvert.DeserializeObject<dynamic>(data);
 
-                            if(p.PartnerId == (string)dataObj.PartnerId)
+                            if (p.PartnerId == (string)dataObj.PartnerId)
                             {
                                 // find it
                                 var recipient = _manager.Sockets.Where(pair => pair.Key.Id == (string)dataObj.PartnerId).FirstOrDefault();
@@ -96,7 +96,7 @@ namespace ConnectFourServer.Middlewares
 
                                 // check if client sent Retry request
                                 // will allow one side to dictate
-                                if(dataObj.Retry != null && (bool)dataObj.Retry)
+                                if (dataObj.Retry != null && (bool)dataObj.Retry)
                                 {
                                     // change player turns
                                     int temp = recipient.Key.Number;
@@ -118,21 +118,21 @@ namespace ConnectFourServer.Middlewares
                             }
                         }
                     }
-                    else if(result.MessageType == WebSocketMessageType.Close)
+                    else if (result.MessageType == WebSocketMessageType.Close)
                     {
                         // remove from list
                         _manager.RemoveSocket(socket);
                         // remove from some players partner
-                        if(p.PartnerId != null)
+                        if (p.PartnerId != null)
                         {
-                           WebSocket partnerSocket = _manager.RemovePlayersPartner(p.PartnerId);
-                           
-                           if(partnerSocket != null)
-                           {
-                               // send message that partner disconnected
-                               await partnerSocket.SendAsync(Encoding.UTF8.GetBytes("{ \"Close\" : \"true\"}"),
-                                    WebSocketMessageType.Text, true, CancellationToken.None);
-                           }
+                            WebSocket partnerSocket = _manager.RemovePlayersPartner(p.PartnerId);
+
+                            if (partnerSocket != null)
+                            {
+                                // send message that partner disconnected
+                                await partnerSocket.SendAsync(Encoding.UTF8.GetBytes("{ \"Close\" : \"true\"}"),
+                                     WebSocketMessageType.Text, true, CancellationToken.None);
+                            }
                         }
                         // close socket
                         await socket.CloseAsync(WebSocketCloseStatus.Empty, null, CancellationToken.None);
@@ -148,7 +148,7 @@ namespace ConnectFourServer.Middlewares
         private async Task SendInitialState(WebSocket socket, string partnerId, int player)
         {
             string json = JsonConvert.SerializeObject(
-                new 
+                new
                 {
                     PartnerId = partnerId,
                     Player = player,
@@ -174,12 +174,12 @@ namespace ConnectFourServer.Middlewares
         {
             byte[] buffer = new byte[1024];
 
-            while(socket.State == WebSocketState.Open)
+            while (socket.State == WebSocketState.Open)
             {
                 WebSocketReceiveResult result = await socket.ReceiveAsync(new ArraySegment<byte>(buffer),
                     CancellationToken.None);
 
-                handleMessage(result, buffer); 
+                handleMessage(result, buffer);
             }
         }
     }

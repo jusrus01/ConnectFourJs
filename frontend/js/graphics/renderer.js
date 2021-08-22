@@ -120,7 +120,7 @@ export class Renderer {
     showId(id) {
         let msg = document.createElement("p");
         msg.innerHTML =
-            "Share this id with a friend: <span class='id-text'>" +
+            "Share this ID with a friend: <span class='id-text'>" +
             id +
             "</span>";
 

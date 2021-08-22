@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Threading;
@@ -43,7 +42,7 @@ namespace ConnectFourServer.Managers
 
                 bool result = Sockets.TryRemove(value);
 
-                if(!result)
+                if (!result)
                 {
                     Console.WriteLine($"Manager->RemoveSocket: Failed to remove socket");
                 }
@@ -62,17 +61,17 @@ namespace ConnectFourServer.Managers
             Player p = new Player(id);
 
             // store the connection socket
-            if(Sockets.TryAdd(p, socket))
+            if (Sockets.TryAdd(p, socket))
             {
                 return p;
             }
-            
+
             return null;
         }
 
         public async void CloseAllConnections()
         {
-            foreach(var sock in Sockets)
+            foreach (var sock in Sockets)
             {
                 try
                 {
@@ -81,7 +80,7 @@ namespace ConnectFourServer.Managers
                 }
                 catch
                 {
-                    
+
                 }
             }
         }

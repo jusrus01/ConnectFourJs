@@ -1,18 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using ConnectFourServer.Managers;
 using ConnectFourServer.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 namespace ConnectFourServer
@@ -31,7 +24,7 @@ namespace ConnectFourServer
         {
             // add connections manager
             services.AddSingleton<ConnectionsManager>();
-            
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -55,10 +48,10 @@ namespace ConnectFourServer
 
         public void OnShutDown()
         {
-            if(_manager != null)
+            if (_manager != null)
             {
                 _manager.CloseAllConnections();
-            }            
+            }
         }
     }
 }
