@@ -1,4 +1,4 @@
-import { cellCountInCol, cellCountInRow, tileSize } from "../config/config.js";
+import { cellCountInCol, cellCountInRow } from "../config/config.js";
 
 export class InputHandler {
     constructor(canvas) {
@@ -6,30 +6,38 @@ export class InputHandler {
         this.input = null;
         this.mousePos = null;
         this.rect = canvas.getBoundingClientRect();
+        this.canvas = canvas;
+        this.defaultTileSize = parseInt(this.canvas.clientWidth / cellCountInRow);
 
-        canvas.addEventListener('click', (event) => {
+        this.canvas.addEventListener('click', (event) => {
 
             if(this.listening) {
 
                 this.input = {
-                    x: Math.trunc((event.clientX - this.rect.left) / tileSize),
-                    y: Math.trunc((event.clientY - this.rect.top) / tileSize)
+                    x: Math.trunc((event.clientX - this.rect.left) / this.defaultTileSize),
+                    y: Math.trunc((event.clientY - this.rect.top) / this.defaultTileSize)
                 };
                 
                 this.listening = false;
             }
         });
 
-        canvas.addEventListener("mousemove", (event) => {
+        this.canvas.addEventListener("mousemove", (event) => {
             this.mousePos = {
-                x: Math.trunc((event.clientX - this.rect.left) / tileSize),
-                y: Math.trunc((event.clientY - this.rect.top) / tileSize)
+                x: Math.trunc((event.clientX - this.rect.left) / this.defaultTileSize),
+                y: Math.trunc((event.clientY - this.rect.top) / this.defaultTileSize)
             };
         });
 
-        canvas.addEventListener("mouseleave", () => {
+        this.canvas.addEventListener("mouseleave", () => {
             this.mousePos = null;
-        })
+        });
+
+
+        window.onresize = () => {
+            this.rect = canvas.getBoundingClientRect();
+            this.defaultTileSize = parseInt(this.canvas.clientWidth / cellCountInRow);
+        }
     }
 
     clear() {
