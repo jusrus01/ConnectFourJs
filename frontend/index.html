@@ -1,50 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Connect Four | Play with a friend!</title>
-    <meta
-      name="description"
-      content="Connect Four game to play with someone online"
-    />
-    <meta name="author" content="jusrus01" />
+        <title>Connect Four | Play with a friend!</title>
+        <meta
+            name="description"
+            content="Connect Four game to play with someone online"
+        />
+        <meta name="author" content="jusrus01" />
 
-    <meta property="og:title" content="Connect Four | Play with a friend!" />
-    <meta property="og:type" content="website" />
+        <meta
+            property="og:title"
+            content="Connect Four | Play with a friend!"
+        />
+        <meta property="og:type" content="website" />
 
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="stylesheet" href="css/styles.css" />
-  </head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
 
-  <body>
-    <div class="container">
-      <div class="split split--center">
-        <div>
-          <canvas width="700" height="600" id="gameCanvas">
-            Sorry. Your browser does not support canvas.
-          </canvas>
-          <p class="status-text">Status: <span class="status-text--bold" id="status">Not Connected</span></p>
+    <body>
+        <div class="container">
+            <div class="split split--center">
+                <div>
+                    <canvas width="700" height="600" id="gameCanvas">
+                        Sorry. Your browser does not support canvas.
+                    </canvas>
+                    <p class="status-text">
+                        Status:
+                        <span class="status-text--bold" id="status"
+                            >Not Connected</span
+                        >
+                    </p>
+                </div>
+
+                <div>
+                    <h1 class="header-text">Connect <i>Four</i></h1>
+                    <h2 class="score">
+                        You: <span class="score-number" id="myScore">0</span>
+                    </h2>
+                    <h2 class="score score--color">
+                        Friend:
+                        <span class="score-number" id="foeScore">0</span>
+                    </h2>
+
+                    <div class="input-holder" id="inputHolder">
+                        <input
+                            class="partner input"
+                            placeholder="Insert your friend's id here!"
+                            type="text"
+                            id="partnerId"
+                        />
+                        <button class="partner" id="partnerIdBtn">
+                            Connect with your friend!
+                        </button>
+                        <div id="info"></div>
+                    </div>
+
+                    <button id="retryBtn">Retry</button>
+                </div>
+            </div>
         </div>
-
-        <div>
-          <h1 class="header-text">Connect <i>Four</i></h1>
-          <h2 class="score">You: <span class="score-number" id="myScore">0</span></h2>
-          <h2 class="score score--color">Friend: <span class="score-number" id="foeScore">0</span></h2>
-
-          <div class="input-holder" id="inputHolder">
-            <input class="partner input" placeholder="Insert your friend's id here!" type="text" id="partnerId" />
-            <button class="partner" id="partnerIdBtn">Connect with your friend!</button>
-            <div id="info"></div>
-          </div>
-
-          <button id="retryBtn">Retry</button>
-        </div>
-      </div>
-    </div>
-    <script type="module" src="js/main.js"></script>
-  </body>
+        <script type="module" src="js/main.js"></script>
+    </body>
 </html>

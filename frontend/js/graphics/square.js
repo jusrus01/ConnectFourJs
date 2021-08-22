@@ -1,4 +1,4 @@
-import { Utils } from '../utils/utils.js';
+import { Utils } from "../utils/utils.js";
 
 export class Square {
     constructor(pos, color, size) {
@@ -8,14 +8,17 @@ export class Square {
 
         this.isDrawn = false;
         this.lastPos = this.pos;
-    }    
+    }
 
     draw(ctx) {
-        if((this.isDrawn && !Utils.arePositionsEqual(this.pos, this.lastPos)) || !this.isDrawn) {
+        if (
+            (this.isDrawn &&
+                !Utils.arePositionsEqual(this.pos, this.lastPos)) ||
+            !this.isDrawn
+        ) {
             ctx.fillStyle = this.color;
             ctx.fillRect(this.pos.x, this.pos.y, this.size, this.size);
             this.lastPos = this.pos;
-
         }
     }
 }

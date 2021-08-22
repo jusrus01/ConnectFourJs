@@ -6,7 +6,7 @@ export const states = {
     Lost: "LOST",
     Retry: "RETRY",
     Tie: "TIE",
-    None: "NONE"
+    None: "NONE",
 };
 
 export class StateHandler {
@@ -16,5 +16,5 @@ export class StateHandler {
 
     setState = (state) => {
         this.currentState = state;
-    }
+    };
 }

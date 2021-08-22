@@ -10,13 +10,13 @@ const ctx = canvas.getContext("2d");
 
 class Game {
     constructor() {
-        this.board = new Board(''); // game board
+        this.board = new Board(""); // game board
 
         this.player = 0; // defines whether player is defined as player1 or player2
-        this.id = '';
-        this.partnerId = ''; // unique id used to connect to clients with each other
-        
-        this.color = ''; // square color
+        this.id = "";
+        this.partnerId = ""; // unique id used to connect to clients with each other
+
+        this.color = ""; // square color
 
         this.running = true; // game state
 
@@ -40,93 +40,91 @@ class Game {
     update = (event) => {
         const values = JSON.parse(event.data);
 
-        if(values.Close && values.Close == "true") {
-            this.board.overrideBoard('');
+        if (values.Close && values.Close == "true") {
+            this.board.overrideBoard("");
             this.stateHandler.setState(states.Disconnected);
             this.score = 0;
             this.foeScore = 0;
             this.renderer.hideRetryBtn();
-            this.partnerId = '';
+            this.partnerId = "";
             this.renderer.showInputHolder();
 
             alert("Your friend disconnected.");
-        } 
+        }
 
-        if(values.BoardState) {
+        if (values.BoardState) {
             this.board.overrideBoard(values.BoardState);
             this.stateHandler.setState(states.Turn);
         }
 
-        if(values.Id) {
+        if (values.Id) {
             this.id = values.Id;
             this.renderer.showId(this.id);
         }
 
-        if(values.PartnerId) {
+        if (values.PartnerId) {
             this.partnerId = values.PartnerId;
             this.renderer.hideInputHolder();
         }
-        
+
         // set color based on your turn
-        if(values.Player) {
+        if (values.Player) {
             this.player = values.Player;
-            if(this.player == 1) {
+            if (this.player == 1) {
                 this.stateHandler.setState(states.Turn);
                 this.color = playerOneColor;
-            } else if(this.player == 2) {
+            } else if (this.player == 2) {
                 this.stateHandler.setState(states.Wait);
                 this.color = playerTwoColor;
             }
         }
-    }
+    };
 
     run() {
-
-        if(this.stateHandler.currentState === states.Turn ||
-            this.stateHandler.currentState === states.Wait) {
-
+        if (
+            this.stateHandler.currentState === states.Turn ||
+            this.stateHandler.currentState === states.Wait
+        ) {
             let playerWon = this.board.isMatch();
-            if(playerWon > 0 && playerWon != 0) {
-                if(playerWon == this.player) {
+            if (playerWon > 0 && playerWon != 0) {
+                if (playerWon == this.player) {
                     this.stateHandler.setState(states.Win);
-                    
-                } else { 
+                } else {
                     this.stateHandler.setState(states.Lost);
                 }
-            } else if(playerWon == 0) {
+            } else if (playerWon == 0) {
                 this.stateHandler.setState(states.Tie);
             }
         }
 
-        switch(this.stateHandler.currentState) {
+        switch (this.stateHandler.currentState) {
             case states.Disconnected:
                 this.score = 0;
                 this.foeScore = 0;
 
-                this.renderer.setStatus('Disconnected');
+                this.renderer.setStatus("Disconnected");
                 this.renderer.addBackground();
                 this.renderer.addGrid();
                 break;
 
             case states.Turn:
-                
                 this.renderer.setStatus("Waiting for your turn...");
 
-                if(this.inputHandler.listening) {
-
+                if (this.inputHandler.listening) {
                     let pos = this.inputHandler.input;
                     // position was set
-                    if(pos != null) {
+                    if (pos != null) {
+                        let finalY = this.inputHandler.findFinalY(
+                            pos.x,
+                            this.board.get()
+                        );
 
-                        let finalY = this.inputHandler.findFinalY(pos.x, this.board.get());
-
-                        if(finalY >= 0) {
-
+                        if (finalY >= 0) {
                             this.board.set(pos.x, finalY, this.player);
-    
+
                             this.dataService.sendMessage({
-                                "BoardState" : this.board.get(),
-                                "PartnerId" : this.partnerId
+                                BoardState: this.board.get(),
+                                PartnerId: this.partnerId,
                             });
 
                             this.inputHandler.clear();
@@ -145,7 +143,6 @@ class Game {
 
                 this.renderer.setStatus("Tied.");
 
-                this.renderer.drawTie();
                 this.stateHandler.setState(states.None);
                 break;
 
@@ -154,7 +151,6 @@ class Game {
                 this.renderer.setScore(this.score, this.foeScore);
 
                 this.renderer.setStatus("You won!");
-                this.renderer.drawWin();
                 this.stateHandler.setState(states.None);
                 break;
 
@@ -164,7 +160,6 @@ class Game {
 
                 this.renderer.setStatus("You lost!");
 
-                this.renderer.drawLost();
                 this.stateHandler.setState(states.None);
                 break;
 
@@ -176,7 +171,7 @@ class Game {
                 break;
 
             case states.None:
-                this.board.overrideBoard('');
+                this.board.overrideBoard("");
                 this.renderer.showRetryBtn();
                 this.stateHandler.setState(states.Retry);
                 break;
@@ -188,7 +183,7 @@ class Game {
         }
 
         // temp
-        if(this.stateHandler.currentState !== states.Retry) {
+        if (this.stateHandler.currentState !== states.Retry) {
             this.renderer.hideRetryBtn();
         }
 
@@ -211,37 +206,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // temp
     const btn = document.getElementById("partnerIdBtn");
-    btn.addEventListener('click', () => {
+    btn.addEventListener("click", () => {
         const value = partnerIdInput.value;
 
         game.dataService.sendMessage({
-            "PartnerId": value
+            PartnerId: value,
         });
 
-        partnerIdInput.value = '';
+        partnerIdInput.value = "";
     });
 
     // temp
     const retryBtn = document.getElementById("retryBtn");
-    retryBtn.addEventListener('click', () => {
-
-        if(game.stateHandler.currentState === states.Retry) {
+    retryBtn.addEventListener("click", () => {
+        if (game.stateHandler.currentState === states.Retry) {
             game.dataService.sendMessage({
-                "PartnerId": game.partnerId,
-                "Retry" : true
+                PartnerId: game.partnerId,
+                Retry: true,
             });
             game.renderer.hideRetryBtn();
         }
     });
 
     // close socket
-    window.addEventListener("beforeunload", function(e) {
+    window.addEventListener("beforeunload", function (e) {
         game.dataService.close();
     });
 
-    window.main = function() {
+    window.main = function () {
         window.requestAnimationFrame(main);
         game.run();
-    }
+    };
     main();
 });
