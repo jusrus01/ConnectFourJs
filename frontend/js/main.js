@@ -40,8 +40,6 @@ class Game {
     update = (event) => {
         const values = JSON.parse(event.data);
 
-        console.log(values);
-
         if(values.Close && values.Close == "true") {
             this.board.overrideBoard('');
             this.stateHandler.setState(states.Disconnected);
